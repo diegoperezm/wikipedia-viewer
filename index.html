@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <!-- prevent favicon request -->
+    <link href="data:;base64,iVBORw0KGgo=" rel="icon" />
+    <title>Wikipedia Viewer</title>
+    <link rel="stylesheet" href="css/styles.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<header class="text-center">
+<h1>Wikipedia Viewer</h1>
+</header>
+<div class="container text-center">
+ <div class="jumbotron">
+  <div>
+   <div class="row">
+    <div class="col-xs-6 col-xs-offset-3">
+      <input class="searchBar" type="text" placeholder="Search for..." id="searchText">
+    </div>
+   </div>
+  </div>   
+<div class="buttons">
+ <div class="row">
+  <div class="col-xs-12">
+   <button class="btn btn-default btn-primary" type="button" id="buttonSearchWikiEntry">Search</button>
+   <a href="https://en.wikipedia.org/wiki/Special:Random" class="btn btn-default btn-primary">Random</a>
+  </div>
+ </div>
+</div>
+  </div>
+</div>
+   <div class="container">
+      <div class="jumbotron wikiEntries">
+       <div class="row">
+           <div class="col-xs-12" id="content"></div>
+       </div>
+   </div>
+</div>  
+    <script src="js/main.min.js"></script>
+</body>
+</html>
+
