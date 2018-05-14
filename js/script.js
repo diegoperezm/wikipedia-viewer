@@ -4,70 +4,70 @@
  *
  */
 
-var nameSpace = {
+var variables = {
   contentDiv: document.getElementById("content"),
   url:
     "https://en.wikipedia.org/w/api.php?&action=opensearch&format=json&origin=*&search=",
   searchText: document.getElementById("searchText"),
   searchWikiEntry: document.getElementById("buttonSearchWikiEntry"),
+};
 
+var  nameSpace = { 
   search: function() {
-    var that = this;
-
-    this.searchWikiEntry.addEventListener("click", function() {
-      fetch(that.url + that.searchText.value)
+    variables.searchWikiEntry.addEventListener("click", function() {
+      fetch(variables.url + variables.searchText.value)
         .then(function(data) {
           return data.json();
         })
         .then(function(articles) {
-          that.populate(articles);
+          nameSpace.populate(articles);
         });
     });
   },
-
   enterListener: function() {
-    var that = this;
     document.addEventListener("keypress", function(event) {
       if (event.keyCode === 13) {
-        fetch(that.url + that.searchText.value)
+        fetch(variables.url + variables.searchText.value)
           .then(function(data) {
             return data.json();
           })
           .then(function(articles) {
-            that.populate(articles);
+            nameSpace.populate(articles);
           });
       }
     });
   },
-
   populate: function(articles) {
-    if (articles.error) {
-      var AddSomething = [
+
+   var AddSomething = [
         ["add something"],
         ["add something"],
         ["add something"],
         [""]
       ];
-      this.createDOMElements(AddSomething);
-    } else if (articles[1].length === 0) {
-      var nothingFound = [
+
+    var nothingFound = [
         ["nothing found"],
         ["Nothing Found"],
         ["Nothing Found"],
         [""]
-      ];
-      this.createDOMElements(nothingFound);
+    ];
+    
+
+   if (articles.error) {
+     nameSpace.createDOMElements(AddSomething);
+   } else if (articles[1].length === 0) {
+     nameSpace.createDOMElements(nothingFound);
     } else if (articles[1].length !== 0) {
-      this.createDOMElements(articles);
+      nameSpace.createDOMElements(articles);
     }
   },
 
   createDOMElements: function(articles) {
-    var that = this;
 
-    if (that.contentDiv.firstChild) {
-      while (that.contentDiv.firstChild) {
-        that.contentDiv.removeChild(that.contentDiv.firstChild);
+    if (variables.contentDiv.firstChild) {
+      while (variables.contentDiv.firstChild) {
+        variables.contentDiv.removeChild(variables.contentDiv.firstChild);
       }
     }
 
@@ -96,7 +96,7 @@ var nameSpace = {
       article.appendChild(header);
       article.appendChild(paragraph);
 
-      this.contentDiv.appendChild(article);
+      variables.contentDiv.appendChild(article);
     }
   }
 };
