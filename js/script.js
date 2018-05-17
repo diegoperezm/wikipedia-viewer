@@ -1,73 +1,76 @@
-/**
- *
- * @namespace
- *
- */
+var variable = {
 
-var variables = {
-  contentDiv: document.getElementById("content"),
-  url:
-    "https://en.wikipedia.org/w/api.php?&action=opensearch&format=json&origin=*&search=",
-  searchText: document.getElementById("searchText"),
-  searchWikiEntry: document.getElementById("buttonSearchWikiEntry"),
+ contentDiv: document.getElementById("content"),
+ url:
+  "https://en.wikipedia.org/w/api.php?&action=opensearch&format=json&origin=*&search=",
+ searchText: document.getElementById("searchText"),
+ searchWikiEntry: document.getElementById("buttonSearchWikiEntry"),
+
 };
 
-var  nameSpace = { 
-  search: function() {
-    variables.searchWikiEntry.addEventListener("click", function() {
-      fetch(variables.url + variables.searchText.value)
-        .then(function(data) {
-          return data.json();
-        })
-        .then(function(articles) {
-          nameSpace.populate(articles);
-        });
-    });
-  },
-  enterListener: function() {
-    document.addEventListener("keypress", function(event) {
-      if (event.keyCode === 13) {
-        fetch(variables.url + variables.searchText.value)
-          .then(function(data) {
-            return data.json();
-          })
-          .then(function(articles) {
-            nameSpace.populate(articles);
-          });
-      }
-    });
-  },
-  populate: function(articles) {
 
-   var AddSomething = [
-        ["add something"],
-        ["add something"],
-        ["add something"],
-        [""]
-      ];
+var listener = {
+
+ searchButtonClick: function() {
+  variable.searchWikiEntry.addEventListener("click", action.fetch);
+ },
+ enterKeyPress: function() {
+ document.addEventListener("keypress", action.checkKey);
+ },
+
+};
+
+
+var action = {
+  addListeners: function() {
+    listener.searchButtonClick();
+    listener.enterKeyPress();
+  },
+
+  fetch: function() {
+    fetch(variable.url + variable.searchText.value)
+      .then(function(data) {
+        return data.json();
+      })
+      .then(function(articles) {
+        action.populate(articles);
+      });
+  },
+
+  checkKey: function(event) {
+    if (event.keyCode === 13) {
+      action.fetch(variable.url + variable.searchText.value);
+    }
+  },
+
+  populate: function(articles) {
+    var AddSomething = [
+      ["add something"],
+      ["add something"],
+      ["add something"],
+      [""]
+    ];
 
     var nothingFound = [
-        ["nothing found"],
-        ["Nothing Found"],
-        ["Nothing Found"],
-        [""]
+      ["nothing found"],
+      ["Nothing Found"],
+      ["Nothing Found"],
+      [""]
     ];
-    
 
-   if (articles.error) {
-     nameSpace.createDOMElements(AddSomething);
-   } else if (articles[1].length === 0) {
-     nameSpace.createDOMElements(nothingFound);
+    if (articles.error) {
+      action.createDOMElements(AddSomething);
+    } else if (articles[1].length === 0) {
+      action.createDOMElements(nothingFound);
     } else if (articles[1].length !== 0) {
-      nameSpace.createDOMElements(articles);
+      action.createDOMElements(articles);
     }
   },
 
   createDOMElements: function(articles) {
-
-    if (variables.contentDiv.firstChild) {
-      while (variables.contentDiv.firstChild) {
-        variables.contentDiv.removeChild(variables.contentDiv.firstChild);
+    if (variable.contentDiv.firstChild) {
+      while (variable.contentDiv.firstChild) {
+        variable.contentDiv.removeChild(variable.contentDiv.firstChild);
       }
     }
 
@@ -83,9 +86,9 @@ var  nameSpace = {
       paragraph.innerText = articles[2][i];
 
       /* 
-       Replaces each escape sequence in the encoded URI component 
-       with the character that it represents.
-      */
+  Replaces each escape sequence in the encoded URI component 
+  with the character that it represents.
+  */
       anchor.href = decodeURIComponent(articles[3][i]);
       anchor.innerText = decodeURIComponent(articles[3][i]);
 
@@ -96,12 +99,10 @@ var  nameSpace = {
       article.appendChild(header);
       article.appendChild(paragraph);
 
-      variables.contentDiv.appendChild(article);
+      variable.contentDiv.appendChild(article);
     }
   }
 };
 
-nameSpace.search();
-nameSpace.enterListener();
-
+action.addListeners();
 
