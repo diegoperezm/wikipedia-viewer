@@ -1,49 +1,59 @@
 var variable = {
-
- contentDiv: document.getElementById("content"),
- url:
-  "https://en.wikipedia.org/w/api.php?&action=opensearch&format=json&origin=*&search=",
- searchText: document.getElementById("searchText"),
- searchWikiEntry: document.getElementById("buttonSearchWikiEntry"),
-
+  contentDiv: document.getElementById("content"),
+  baseURL:
+    "https://en.wikipedia.org/w/api.php?&action=opensearch&format=json&origin=*&search=",
+  searchText: document.getElementById("searchText"),
+  searchWikiEntry: document.getElementById("buttonSearchWikiEntry")
 };
-
 
 var listener = {
-
- searchButtonClick: function() {
-  variable.searchWikiEntry.addEventListener("click", action.fetch);
- },
- enterKeyPress: function() {
- document.addEventListener("keypress", action.checkKey);
- },
-
+  searchButtonClick: function() {
+    variable.searchWikiEntry.addEventListener("click", function() {
+      action.fetch(
+        variable.baseURL,
+        variable.searchText.value,
+        variable.contentDiv
+      );
+    });
+  },
+  enterKeyPress: function() {
+    document.addEventListener("keypress", function(event) {
+      action.checkKey(
+        variable.baseURL,
+        variable.searchText.value,
+        event,
+        variable.contentDiv
+      );
+    });
+  }
 };
 
-
 var action = {
-  addListeners: function() {
-    listener.searchButtonClick();
-    listener.enterKeyPress();
+  addListeners: function(listeners) {
+    listeners.searchButtonClick();
+    listeners.enterKeyPress();
   },
 
-  fetch: function() {
-    fetch(variable.url + variable.searchText.value)
+  fetch: function(baseURL, searchText, contentDiv) {
+    var url = baseURL + searchText;
+
+    fetch(url)
       .then(function(data) {
         return data.json();
       })
       .then(function(articles) {
-        action.populate(articles);
+        action.populate(articles, contentDiv);
       });
+
   },
 
-  checkKey: function(event) {
+  checkKey: function(baseURL, searchText, event, contentDiv) {
     if (event.keyCode === 13) {
-      action.fetch(variable.url + variable.searchText.value);
+      action.fetch(baseURL, searchText, contentDiv);
     }
   },
 
-  populate: function(articles) {
+  populate: function(articles, contentDiv) {
     var AddSomething = [
       ["add something"],
       ["add something"],
@@ -59,18 +69,18 @@ var action = {
     ];
 
     if (articles.error) {
-      action.createDOMElements(AddSomething);
+      action.createDOMElements(AddSomething, contentDiv);
     } else if (articles[1].length === 0) {
-      action.createDOMElements(nothingFound);
+      action.createDOMElements(nothingFound, contentDiv);
     } else if (articles[1].length !== 0) {
-      action.createDOMElements(articles);
+      action.createDOMElements(articles, contentDiv);
     }
   },
 
-  createDOMElements: function(articles) {
-    if (variable.contentDiv.firstChild) {
-      while (variable.contentDiv.firstChild) {
-        variable.contentDiv.removeChild(variable.contentDiv.firstChild);
+  createDOMElements: function(articles, contentDiv) {
+    if (contentDiv.firstChild) {
+      while (contentDiv.firstChild) {
+        contentDiv.removeChild(contentDiv.firstChild);
       }
     }
 
@@ -99,10 +109,11 @@ var action = {
       article.appendChild(header);
       article.appendChild(paragraph);
 
-      variable.contentDiv.appendChild(article);
+      contentDiv.appendChild(article);
     }
   }
 };
 
-action.addListeners();
+
+action.addListeners(listener);
 
